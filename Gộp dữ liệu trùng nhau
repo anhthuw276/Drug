@@ -1,0 +1,11 @@
+data['ReviewCount'] = data['Reviews'].str.extract('(\d+)').astype(int) # Tách số lượng review từ trường 'Reviews'
+grouped_data = data.groupby('Drug').agg({
+    'Condition': 'first',  # giá trị đầu tiên của 'Condition'
+    'Indication': 'first',  # giá trị đầu tiên của 'Indication'
+    'Type': 'first',  # giá trị đầu tiên của 'Type'
+    'ReviewCount': 'sum',  # Tổng số lượng reviews
+    'Effective': 'mean',  # Trung bình hiệu quả
+    'EaseOfUse': 'mean',  # Trung bình độ dễ sử dụng
+    'Satisfaction': 'mean',  # Trung bình mức độ hài lòng
+    'Information': list  # Tất cả thông tin khác về thuốc 
+}).reset_index() # Gộp các dòng trùng loại thuốc
