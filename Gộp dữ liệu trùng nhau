@@ -1,5 +1,5 @@
-data['ReviewCount'] = data['Reviews'].str.extract('(\d+)').astype(int) # Tách số lượng review từ trường 'Reviews'
-grouped_data = data.groupby('Drug').agg({
+df['ReviewCount'] = df['Reviews'].str.extract(r'(\d+)').astype(float) # Tách số lượng review từ trường 'Reviews'
+grouped_data = df.groupby('Drug').agg({
     'Condition': 'first',  # giá trị đầu tiên của 'Condition'
     'Indication': 'first',  # giá trị đầu tiên của 'Indication'
     'Type': 'first',  # giá trị đầu tiên của 'Type'
