@@ -1,5 +1,5 @@
 df['ReviewCount'] = df['Reviews'].str.extract(r'(\d+)').astype(float) # Tách số lượng review từ trường 'Reviews'
-grouped_data = df.groupby('Drug').agg({
+grouped_data = df.groupby('Condision','Drug').agg({
     'Condition': 'first',  # giá trị đầu tiên của 'Condition'
     'Indication': 'first',  # giá trị đầu tiên của 'Indication'
     'Type': 'first',  # giá trị đầu tiên của 'Type'
@@ -8,4 +8,4 @@ grouped_data = df.groupby('Drug').agg({
     'EaseOfUse': 'mean',  # Trung bình độ dễ sử dụng
     'Satisfaction': 'mean',  # Trung bình mức độ hài lòng
     'Information': list  # Tất cả thông tin khác về thuốc 
-}).reset_index() # Gộp các dòng trùng loại thuốc
+}).reset_index() # Gộp các dòng cùng bệnh và trùng loại thuốc
