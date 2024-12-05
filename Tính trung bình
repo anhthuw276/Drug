@@ -1,0 +1,1 @@
+grouped_data['Average_Effectiveness'] = grouped_data[['Effective', 'EaseOfUse', 'Satisfaction']].mean(axis=1) # Tính trung bình của ba trường 'Effective', 'EaseOfUse', và 'Satisfaction'
