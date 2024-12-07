@@ -1,4 +1,3 @@
-#Nguồn dữ liệu Drug Performance Evaluation: https://www.kaggle.com/datasets/thedevastator/drug-performance-evaluation
 import pandas as pd
 from openpyxl import load_workbook
 
