@@ -7,7 +7,7 @@ def Doc_du_lieu() :
 def Cap_nhat_du_lieu() :
     # Khai báo thư viện
     import pandas as pd
-    df = pd.read_excel("d:/Drug (1).xlsx",engine='openpyxl')
+    df = pd.read_excel("d:/Drug (1).xlsx",engine="openpyxl")
     df['ReviewCount'] = df['Reviews'].str.extract(r'(\d+)').astype(float) # Tách số lượng review từ trường 'Reviews'
     grouped_data = df.groupby('[Condition','Drug]').agg({
     'Indication': 'first',  # giá trị đầu tiên của 'Indication'
@@ -27,17 +27,21 @@ def Tao_du_lieu_moi() :
     # In kết quả tạo dữ liệu mới
     print(df)
 def Xoa_du_lieu() :
-    # In kết quả xóa dữ liệu
-    print(Xoa_du_lieu)
-def Tinh_trung_binh() :
-    # Khai báo thư viện
     import pandas as pd
-    df = pd.read_excel("d:/Drug (4).xlsx",engine="openpyxl")
-    # Lựa chọn hết dòng : và lấy 3 cột từ 6:9
-    df.iloc[:,6:9]
-    # Tính trung bình của ba trường 'Effective', 'EaseOfUse', và 'Satisfaction'
-    df['Average_Effectiveness'] = df.groupby[['Effective', 'EaseOfUse', 'Satisfaction']].mean(axis=1)
-    print(df['Average_Effectiveness'])
+    from openpyxl import load_workbook
+    # Read the Excel file
+    workbook =  load_workbook(filename="d:/Drug (1).xlsx",engine="openpyxl")
+    # Chọn sheet làm việc mặc định
+    sheet = workbook.active  
+    # Read data from sheet to DataFrame
+    data = pd.DataFrame(sheet.values)
+    df = pd.read_excel("d:/Drug (1).xlsx",engine="openpyxl")  #chỗ "drug (1)" là tên file mình đã tải về, bạn đặt tên file ntn thì ghi lại ở đây như vậy. ".xlsx" là định dạng loại tệp, ở đây là tệp excel.
+    # Filter duplicated datas of 4 collums of reviews, efective, ease of use, Satisfaction 
+    df = df.drop_duplicates(subset=['Reviews', 'Effective', 'EaseOfUse', 'Satisfaction'])
+    # Display DataFrame after deleting duplicated rows - hiển thị số dòng trong file (optional)
+    print(df)
+    # Save the excel file - phần đặt tên file , đặt gì cũng được
+    df.to_excel("drug sus.xlsx", index=False)
 def Bieu_do() :
     # Khai báo thu viện
     import pandas as pd 
@@ -59,9 +63,8 @@ luachon_dict = {
     2: Cap_nhat_du_lieu ,
     3: Tao_du_lieu_moi ,
     4: Xoa_du_lieu ,
-    5: Tinh_trung_binh ,
-    6: Bieu_do ,
-    7: Khong_hop_le
+    5: Bieu_do ,
+    6: Khong_hop_le
 }
 def menu() :
     while True :
@@ -71,9 +74,8 @@ def menu() :
         print("2.Cap_nhat_du_lieu")
         print("3.Tao_du_lieu_moi")
         print("4.Xoa_du_lieu")
-        print("5.Tinh_trung_binh")
-        print("6.Bieu_do")
-        print("7.Thoat_chuong_trinh")
+        print("5.Bieu_do")
+        print("6.Thoat_chuong_trinh")
         chon = input("Mời chọn tính năng:")
         if chon.isdigit() :
             chon = int(chon)
@@ -85,4 +87,3 @@ def menu() :
             print("Hãy nhập lại,dữ liệu là Số nhé !")
 # Chạy menu
 menu()
-       
