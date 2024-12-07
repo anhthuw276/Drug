@@ -1,11 +1,13 @@
 import pandas as pd 
 import matplotlib.pyplot as plt
 def Doc_du_lieu() :
-    df = pd.read_csv("d:/Drug.csv")
+    df = pd.read_excel("d:/Drug (1).xlsx",engine='openpyxl')
     # In kết quả đọc dữ liệu
     print(df)
 def Cap_nhat_du_lieu() :
-    df = pd.read_csv("d:/Drug.csv")
+    # Khai báo thư viện
+    import pandas as pd
+    df = pd.read_excel("d:/Drug (1).xlsx",engine='openpyxl')
     df['ReviewCount'] = df['Reviews'].str.extract(r'(\d+)').astype(float) # Tách số lượng review từ trường 'Reviews'
     grouped_data = df.groupby('[Condition','Drug]').agg({
     'Indication': 'first',  # giá trị đầu tiên của 'Indication'
@@ -16,20 +18,31 @@ def Cap_nhat_du_lieu() :
     'Satisfaction': 'mean',  # Trung bình mức độ hài lòng
     'Information': list  # Tất cả thông tin khác về thuốc 
 }).reset_index() # Gộp các dòng cùng bệnh và trùng loại thuốc
+    print("df['ReviewCount']")
+    print("grouped_data")
 def Tao_du_lieu_moi() :
+    # Khai báo thu viện
+    import pandas as pd 
+    df = pd.read_excel("d:/Drug (4).xlsx",engine="openpyxl")
     # In kết quả tạo dữ liệu mới
-    print(Tao_du_lieu_moi)
+    print(df)
 def Xoa_du_lieu() :
     # In kết quả xóa dữ liệu
     print(Xoa_du_lieu)
 def Tinh_trung_binh() :
-    df = pd.read_csv("d:/Drug.csv")
+    # Khai báo thư viện
+    import pandas as pd
+    df = pd.read_excel("d:/Drug (4).xlsx",engine="openpyxl")
     # Lựa chọn hết dòng : và lấy 3 cột từ 6:9
     df.iloc[:,6:9]
     # Tính trung bình của ba trường 'Effective', 'EaseOfUse', và 'Satisfaction'
     df['Average_Effectiveness'] = df.groupby[['Effective', 'EaseOfUse', 'Satisfaction']].mean(axis=1)
+    print(df['Average_Effectiveness'])
 def Bieu_do() :
-    df = pd.read_csv("d:/Drug.csv",sheet_name=0) #đọc file excel, sheet name cho biết là sheet đầu tiên của file 
+    # Khai báo thu viện
+    import pandas as pd 
+    import matplotlib.pyplot as plt
+    df = pd.read_excel("d:/Drug (4).xlsx",engine="openpyxl") #đọc file excel, sheet name cho biết là sheet đầu tiên của file 
     a = df['Reviews'].tolist() # a là danh sách giá trị từ cột reviews
     b = df['Effective'].tolist() # b là danh sách giá trị từ cột effective 
     fig = plt.figure() # tạo không gian biểu đồ để thêm các trục 
