@@ -16,8 +16,8 @@ df = pd.read_excel("Drug (1).xlsx")
 #filter duplicated datas of 4 collums of reviews, efective, ease of use, Satisfaction 
 df = df.drop_duplicates(subset=['Reviews', 'Effective', 'EaseOfUse', 'Satisfaction'])
 
-#display DataFrame after deleting duplicated rows
+#display DataFrame after deleting duplicated rows - hiển thị số dòng trong file (optional)
 print(df)
 
-#save the excel file(optional)
-df.to_excel("Drug_cleaned.xlsx", index=False)
+#save the excel file - phần đặt tên file , đặt gì cũng được
+df.to_excel("drug sus.xlsx", index=False)
