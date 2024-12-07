@@ -11,7 +11,7 @@ sheet = workbook.active
 #read data from sheet to DataFrame
 data = pd.DataFrame(sheet.values)
 
-df = pd.read_excel("Drug (1).xlsx")
+df = pd.read_excel("Drug (1).xlsx")  #chỗ "drug (1)" là tên file mình đã tải về, bạn đặt tên file ntn thì ghi lại ở đây như vậy. ".xlsx" là định dạng loại tệp, ở đây là tệp excel.
 
 #filter duplicated datas of 4 collums of reviews, efective, ease of use, Satisfaction 
 df = df.drop_duplicates(subset=['Reviews', 'Effective', 'EaseOfUse', 'Satisfaction'])
