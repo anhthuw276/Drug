@@ -5,16 +5,16 @@ from openpyxl import load_workbook
 workbook = load_workbook(filename="Drug (1).xlsx")
 sheet = workbook.active  # Chọn sheet làm việc mặc định
 
-# read data from sheet to DataFrame
+# read data from sheet to DataFrame 
 data = pd.DataFrame(sheet.values)
 
 df = pd.read_excel("Drug (1).xlsx") # "Drug (1).xlsx" là tên file đã tải về, tức là lúc tải file về thì có phần đặt tên. ở phần code này thì đặt phải trùng tên file đã đặt, phần .xlsx là tệp excel
 
-# filter duplicated datas of 4 collums of reviews, efective, ease of use, Satisfaction - lọc dữ liệu của 4 cột này, nếu trùng nhau thì xoá
+#lọc dữ liệu của 4 cột này, nếu trùng nhau thì xoá
 df = df.drop_duplicates(subset=['Reviews', 'Effective', 'EaseOfUse', 'Satisfaction'])
 
-# display DataFrame after deleting duplicated rows (optional) - hiển thị số dòng của file
+#hiển thị số dòng của file - có hay ko cũng ko sao
 print(df)
 
-# save the excel file(optional) - đặt tên file, đặt sao cũng được
+# đặt tên file, đặt sao cũng được :)
 df.to_excel("Drug_python .xlsx", index=False)
