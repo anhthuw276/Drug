@@ -1,18 +1,14 @@
 import pandas as pd
-from openpyxl import load_workbook
 
-# mở file excel (nguồn thông tin)
-file_path = 'Drugdbcc.xlsx'       # "Drugdbcc.xlsx" là tên file đã tải về, tức là lúc tải file về thì có phần đặt tên. ở phần code này thì đặt phải trùng tên file đã đặt, phần .xlsx là tệp excel
-df = pd.read_excel(file_path)
+# Đọc tệp Excel
+file_path = 'Drugdbcc.xlsx'                       #bạn đặt tên file ntn thì sửa lại như vậy để code tìm 
+data = pd.read_excel(file_path)
 
-# Tìm các hàng có cả 4 cột giống hệt nhau
-duplicated_rows = df.duplicated(subset=['Reviews', 'Effective', 'EaseOfUse', 'Satisfaction'], keep=False)
+# Loại bỏ các hàng trùng lặp và giữ lại một hàng
+data_cleaned = data.drop_duplicates()
 
-# Chỉ giữ lại các hàng không trùng lặp hoàn toàn
-df = df[~(duplicated_rows & df.duplicated(subset=['Reviews', 'Effective', 'EaseOfUse', 'Satisfaction'], keep='first'))]
+# Ghi kết quả vào tệp Excel mới
+output_path = 'Drugdbcc_cleaned.xlsx'                          # đặt tên ntn cũng được
+data_cleaned.to_excel(output_path, index=False)
 
-# hiển thị số dòng của file - có hay ko cũng ko sao
-print(df)
-
-# đặt tên file, đặt sao cũng được :)
-df.to_excel("Drug_cleanedccdb.xlsx", index=False)
+print(f'Dữ liệu đã được xử lý và lưu tại: {output_path}')          #phần này cho phần terminal thôi, ghi ntn cũng được
