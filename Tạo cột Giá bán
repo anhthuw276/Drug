@@ -1,0 +1,5 @@
+ df = pd.read_excel("Drug_1.xlsx",engine="openpyxl")   
+# Trích xuất các giá trị có dấu $ ở phía trước trong cột Information và tạo thành cột mới với tên Price (giá bán)
+ df['Price'] = df['Information'].str.extract(r'(\$\d+)')
+# In kết quả 5 dòng đầu dữ liệu mới
+ print(df['Price'].head())
