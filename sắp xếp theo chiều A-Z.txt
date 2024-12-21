@@ -1,0 +1,4 @@
+data=pd.read_excel("Drug.xlsx"")  
+data=data.sort_values(by=["Condition","Drug"]) # Sắp xếp dữ liệu theo chiều từ A đến Z của cả cột "Condition" và "Drug"
+data.to_excel("Drug_1.xlsx") #lưu trữ dữ liệu từ một DataFrame vào một file Excel
+print('Đã hoàn thành việc sắp xếp theo chiều từ A đến Z')
