@@ -1,6 +1,6 @@
 import pandas as pd
 df = pd.read_excel('Drug_1.xlsx')
-df['Reviews']=df['Reviews'].str.extract(r'(\d+)').astype(float)# Tách số lượng, xử lí cột Reviews
+df['Reviews']=df['Reviews'].astype(str).str.extract(r'(\d+)').astype(float)# Tách số lượng, xử lí cột Reviews
 df['Reviews'] = df['Reviews'].fillna(0)# Thay giá trị NaN bằng 0
 grouped_df = df.groupby(['Condition', 'Drug', 'Indication', 'Type', 'Effective', 'EaseOfUse', 'Satisfaction', 'Information'], as_index=False)['Reviews'].sum()# Tính tổng cột 'Reviews' khi các cột khác giống nhau
 print(grouped_df.head())
