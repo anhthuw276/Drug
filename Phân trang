@@ -1,0 +1,14 @@
+df=pd.read_excel('Drug.xlsx)
+# Thực hiện nhóm các dòng dữ liệu giống nhau về tên triệu chứng "Condition"
+grouped = df.groupby('Condition')   
+# Đường dẫn tới tệp Excel mới chứa dữ liệu đã phân trang
+new_file_path = "Drug_new.xlsx" 
+# Sử dụng ExcelWriter để ghi dữ liệu vào các sheet khác nhau 
+with pd.ExcelWriter(new_file_path, engine='openpyxl') as writer: 
+    for name, group in grouped: 
+        if len(name)>31: # Nếu tên của sheet quá 30 thì chỉ lấy 30 kí tự đầu
+            group.to_excel(writer,sheet_name=name[:31],index=False)
+        else: # Ghi từng nhóm dữ liệu vào sheet có tên tương ứng 
+            group.to_excel(writer, sheet_name=name, index=False) 
+print("Dữ liệu đã được phân chia và lưu vào các sheet trong tệp Excel mới.")
+print("Đã đọc tệp thành công!")
