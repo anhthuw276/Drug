@@ -1,0 +1,17 @@
+# Khai báo thư viện
+import pandas as pd 
+# Đọc dữ liệu từ trong file excel
+df = pd.read_excel("Drug_1.xlsx")
+# Cập nhật dữ liệu trong DataFrame
+df.at[0, "Condition"] = "Updated Value"
+df.at[1, "Drug"] = "Update Value"
+df.at[2, "Indication"] = "Updated Value"
+df.at[3, "Type"] = "Update Value"
+df.at[4, "Effective"] = 0.0 # Giá trị float
+df.at[5, "Ease Of Use"] = 0.0 # Giá trị float
+df.at[6, "Satisfaction"] = 0.0 # Giá trị float
+df.at[7, "Information"] = "Updated Value"
+df.at[8, "Reviews"] = 0 # Giá trị int
+# Lưu lại file excel
+df.to_excel("Drug_1.xlsx", index=False)
+print(df.head())
