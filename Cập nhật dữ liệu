@@ -2,16 +2,28 @@
 import pandas as pd 
 # Đọc dữ liệu từ trong file excel
 df = pd.read_excel("Drug_1.xlsx")
-# Cập nhật dữ liệu trong DataFrame
-df.at[0, "Condition"] = "Updated Value"
-df.at[1, "Drug"] = "Update Value"
-df.at[2, "Indication"] = "Updated Value"
-df.at[3, "Type"] = "Update Value"
-df.at[4, "Effective"] = 0.0 # Giá trị float
-df.at[5, "Ease Of Use"] = 0.0 # Giá trị float
-df.at[6, "Satisfaction"] = 0.0 # Giá trị float
-df.at[7, "Information"] = "Updated Value"
-df.at[8, "Reviews"] = 0 # Giá trị int
-# Lưu lại file excel
-df.to_excel("Drug_1.xlsx", index=False)
-print(df.head())
+# Yêu cầu người dùng nhập thông tin cập nhật
+dữ_liệu_cột = input("Nhập tên cột cần cập nhật:")
+dữ_liệu_dòng = int(input("Nhập số dòng cần cập nhật:")) - 1
+Update_Value = input("Nhập dữ liệu mới:")
+# Kiểm tra số dòng hợp lệ
+if dữ_liệu_dòng >= 0 and dữ_liệu_dòng < len(df) :
+    # Cập nhật dữ liệu trong DataFrame
+    df.at[0, "Condition"] = "Updated_Value"
+    df.at[1, "Drug"] = "Update_Value"
+    df.at[2, "Indication"] = "Updated_Value"
+    df.at[3, "Type"] = "Update_Value"
+    df.at[4, "Effective"] = 0.0 # Giá trị float
+    df.at[5, "Ease Of Use"] = 0.0 # Giá trị float
+    df.at[6, "Satisfaction"] = 0.0 # Giá trị float
+    df.at[7, "Information"] = "Updated_Value"
+    df.at[8, "Reviews"] = 0 # Giá trị int
+    # Lưu lại file excel
+    df.to_excel("Drug_1.xlsx", index=False)
+    print(f"Dữ liệu tại cột {dữ_liệu_cột} dòng {dữ_liệu_dòng + 1 } đã được cập nhật thành {Update_Value} ")
+    print(f"Tên cột được cập nhật : {dữ_liệu_cột}")
+    print("Nội dung dòng cần cập nhật")
+    print(df.iloc[dữ_liệu_dòng])
+else :
+    print("Số dòng không hợp lệ.")
+    print(df.head())
