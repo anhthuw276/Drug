@@ -1,29 +1,26 @@
-# Khai báo thư viện
-import pandas as pd 
-# Đọc dữ liệu từ trong file excel
-df = pd.read_excel("Drug_1.xlsx")
-# Yêu cầu người dùng nhập thông tin cập nhật
-dữ_liệu_cột = input("Nhập tên cột cần cập nhật:")
-dữ_liệu_dòng = int(input("Nhập số dòng cần cập nhật:")) - 1
-Update_Value = input("Nhập dữ liệu mới:")
-# Kiểm tra số dòng hợp lệ
-if dữ_liệu_dòng >= 0 and dữ_liệu_dòng < len(df) :
-    # Cập nhật dữ liệu trong DataFrame
-    df.at[0, "Condition"] = "Updated_Value"
-    df.at[1, "Drug"] = "Update_Value"
-    df.at[2, "Indication"] = "Updated_Value"
-    df.at[3, "Type"] = "Update_Value"
-    df.at[4, "Effective"] = 0.0 # Giá trị float
-    df.at[5, "Ease Of Use"] = 0.0 # Giá trị float
-    df.at[6, "Satisfaction"] = 0.0 # Giá trị float
-    df.at[7, "Information"] = "Updated_Value"
-    df.at[8, "Reviews"] = 0 # Giá trị int
-    # Lưu lại file excel
-    df.to_excel("Drug_1.xlsx", index=False)
-    print(f"Dữ liệu tại cột {dữ_liệu_cột} dòng {dữ_liệu_dòng + 1 } đã được cập nhật thành {Update_Value} ")
-    print(f"Tên cột được cập nhật : {dữ_liệu_cột}")
-    print("Nội dung dòng cần cập nhật")
-    print(df.iloc[dữ_liệu_dòng])
-else :
-    print("Số dòng không hợp lệ.")
-    print(df.head())
+def Update():
+    """Cập nhật dữ liệu theo yêu cầu  người dùng"""
+    # Đọc dữ liệu từ trong file excel
+    file="Drug_1.xlsx"
+    df = pd.read_excel(file)
+    so_dong=len(df)
+    print("Số dòng có trong data",so_dong)
+    so_luong=-so_dong
+    while so_luong<0 or so_luong>so_dong:
+        so_luong=int(input("Nhập số lượng ô dữ liệu muốn cập nhật:")) # Yêu cầu người dùng nhập số lượng ô dữ liệu muốn cập nhật
+    tên_cột=df.columns.to_list()
+    print("Các cột có trong data:",tên_cột)
+    # Yêu cầu người dùng nhập thông tin cập nhật
+    for i in range(so_luong):
+        dữ_liệu_cột="l"
+        while dữ_liệu_cột not in tên_cột:
+            dữ_liệu_cột = input(f"Nhập tên cột thứ {i+1} cần cập nhật:")
+        dữ_liệu_dòng=-so_dong
+        while dữ_liệu_dòng<0 or dữ_liệu_dòng>so_dong: # Kiểm tra số dòng hợp lệ
+            dữ_liệu_dòng = int(input(f"Nhập số dòng thứ {i+1} cần cập nhật:")) - 1
+        Update_Value = input("Nhập dữ liệu mới:")
+        df.at[dữ_liệu_dòng,dữ_liệu_cột]=Update_Value
+        print(f"Dữ liệu tại cột {dữ_liệu_cột} dòng {dữ_liệu_dòng + 1 } đã được cập nhật thành {Update_Value} ")
+        print("Dữ liệu sau khi cập nhật là:",df.iloc[:dữ_liệu_dòng+1])
+    df.to_excel(file, index=False) #Lưu lại dữ liệu vào tệp excel
+    print(f"Đã hoàn thành việc xử lý dữ liệu và lưu tại {file}")
