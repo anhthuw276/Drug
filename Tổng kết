@@ -1,7 +1,25 @@
 import pandas as pd 
 import matplotlib.pyplot as plt
 
+def Thong_tin():
+    """Hàm hiển thị thông tin của tệp dữ liệu"""
+    chon1=input("Bạn chọn dữ liệu gốc hay đã chỉnh sửa(g/c):")
+    if chon1=="g":
+        df = pd.read_excel("Drug.xlsx")
+        print("Thông tin tệp:")
+        print(df.info())
+    else:
+        file_path = "Drug_1.xlsx"
+        try: # sử dụng try - except để bắt lỗi
+            df = pd.read_excel(file_path) # Thử đọc tệp dữ liệu
+            print("Thông tin tệp:")
+            print(df.info())
+        except FileNotFoundError: # nếu tệp không tồn tại thì in câu tệp chưa tồn tại 
+            print(f"Tệp {file_path} chưa tồn tại.")
+
+
 def Doc_du_lieu():
+    """Phân trang dữ liệu trong tệp excel"""
     chon1=input("Bạn chọn dữ liệu gốc hay đã chỉnh sửa(g/c):")
     if chon1=="g":
         df = pd.read_excel("Drug.xlsx")
@@ -27,6 +45,7 @@ def Doc_du_lieu():
 
 
 def Sap_xep_du_lieu():
+    """Sắp xếp dữ liệu theo chiều từ A đến Z của hai cột Condition và Drug"""
     try:
         data = pd.read_excel("Drug_1.xlsx") # Thử đọc tệp Drug_1.xlsx
     except FileNotFoundError:
@@ -39,6 +58,7 @@ def Sap_xep_du_lieu():
 
 
 def Cap_nhat_du_lieu() :
+    """Cập nhật dữ liệu cột Reviews trở thành số"""
     try:
         df = pd.read_excel("Drug_1.xlsx") # Thử đọc tệp Drug_1.xlsx
     except FileNotFoundError:
@@ -53,35 +73,22 @@ def Cap_nhat_du_lieu() :
     print(grouped_df.head())
 
 
-
 def Tao_du_lieu_moi() :
+    """Tạo cột dữ liệu mới là giá bán của thuốc"""
     try:
         df = pd.read_excel("Drug_1.xlsx") # Thử đọc tệp Drug_1.xlsx
     except FileNotFoundError:
         df= pd.read_excel("Drug.xlsx") # Nếu tệp trên không tồn tại thì sẽ đọc tệp Drug.xlsx
     # Trích xuất các giá trị có dấu $ ở phía trước trong cột Information và tạo thành cột mới với tên Price (giá bán)
     df['Price'] = df['Information'].str.extract(r'(\$\d+)')
+    df.to_excel("Drug_1.xlsx",index=False)
     print("Đã hoàn thành việc tạo trường dữ liệu mới - Price và được lưu tại: Drug_1.xlsx ")
     # In kết quả 5 dòng đầu dữ liệu mới
     print(df.head())
 
 
-def Tao_data():
-    try:
-        data = pd.read_excel("Drug_1.xlsx") # Thử đọc tệp Drug_1.xlsx
-    except FileNotFoundError:
-        data= pd.read_excel("Drug.xlsx") # Nếu tệp trên không tồn tại thì sẽ đọc tệp Drug.xlsx
-    # lọc / tìm kiếm thông tin chứa :"Acute Bacterial Sinusitis"
-    condition_to_cut = "Acute Bacterial Sinusitis" # điều kiện
-    filtered_rows = data[data['Condition'].str.contains(condition_to_cut, na=False)] # phần tìm kiếm thông tin
-    # lưu dữ liệu các hàng chứa Acute Bacterial Sinusitis sang file mới
-    filtered_file_path = 'Acute_Bacterial_Sinusitis.xlsx' 
-    filtered_rows.to_excel(filtered_file_path, index=False)  #các thông tin ko liên quan sẽ ko được đổi tên như trên
-    print(f"Đã hoàn thành việc tạo tệp dữ liệu mới chứa thông tin của bệnh 'Acute Bacterial Sinusitis' và được lưu tại: {filtered_file_path}")
-    print(filtered_rows.head())
-
-
 def Xoa_du_lieu():
+    """Xóa các dữ liệu trùng nhau"""
     try:
         data = pd.read_excel("Drug_1.xlsx") # Thử đọc tệp Drug_1.xlsx
     except FileNotFoundError:
@@ -95,32 +102,162 @@ def Xoa_du_lieu():
     print(data_cleaned.head())
 
 
-def Bieu_do_tron() :
+def Tao_data():
+    """Tạo các tệp dữ liệu mới"""
     try:
-        df = pd.read_excel("Acute_Bacterial_Sinusitis.xlsx") #Thử đọc file excel
-        data=df.loc[df['Drug']=='Amoxicillin'] # Lấy những dòng dữ liệu với điều kiện tên thuốc là "Amoxicillin"
+        data = pd.read_excel("Drug_1.xlsx",engine="openpyxl") # Thử đọc tệp Drug_1.xlsx
+    except FileNotFoundError:
+        data= pd.read_excel("Drug.xlsx",engine="openpyxl") # Nếu tệp trên không tồn tại thì sẽ đọc tệp Drug.xlsx
+    lst_conditions=data["Condition"].unique().tolist() # Tạo một danh sách tên các bệnh
+    print("Danh sách các bệnh:",lst_conditions) # In ra tên các bệnh
+    cond_name=input("Vui lòng nhập tên bệnh mà bạn muốn vẽ biểu đồ:") # Người dùng nhập tên bệnh muốn vẽ biểu đồ ở phần sau
+    cond=data.loc[data["Condition"]==cond_name] # Tạo data khác với điều kiện giống nhau về tên bệnh
+    cond_data=f"{cond_name}.xlsx" # Đặt tên cho data vừa tạo
+    cond.to_excel(cond_data,index=False) # Lưu data vừa tạo vào tệp excel mới
+    lst_drugs=cond["Drug"].unique().tolist() # Tạo một danh sách tên thuốc trong bệnh vừa chọn ở trên
+    print("Danh sách các thuốc trong bệnh vừa nhập ở trên:",lst_drugs) # In ra tên các loại thuốc 
+    drug_name=input("Vui lòng nhập tên thuốc mà bạn muốn vẽ biểu đồ:") # Người dùng nhập tên thuốc muốn vẽ biểu đồ ở phần sau
+    drug=cond.loc[cond["Drug"]==drug_name] # Tạo một data khác với điều kiện giống nhau về tên thuốc trong bệnh vừa nhập ở trên
+    drug_data=f"{drug_name}.xlsx" #Đặt tên cho data vừa tạo
+    drug.to_excel(drug_data,index=False) # Lưu data vừa tạo vào tệp excel mới
+
+
+def Create():
+    """Tạo dữ liệu mới theo yêu cầu người dùng"""
+    # Đọc file Excel
+    file = "Drug_1.xlsx"
+    data = pd.read_excel(file)
+    print("Dữ liệu hiện tại:\n", data)
+    num_rows=len(data) # Lưu số lượng dòng của tệp vào biến
+    print("Số dòng của tệp dữ liệu là:",num_rows) # In số lượng dòng trước khi thêm
+    rows=-num_rows
+    while rows<0 or rows>num_rows: # Vòng lặp kiểm tra số lượng dòng thêm dữ liệu không là số âm và không lớn hơn số dòng ban đầu
+        rows=int(input("Nhập số lượng dòng muốn thêm dữ liệu:")) # Nhập số lượng dòng muốn thêm dữ liệu
+    for i in range(rows):
+    # Yêu cầu người dùng nhập dữ liệu mới cho từng cột
+        new_data = {}
+        row_index=-num_rows
+        while row_index<0 or row_index>num_rows:# Vòng lặp kiểm tra số thứ tự dòng thêm dữ liệu không là số âm và không lớn hơn số dòng ban đầu
+        # Nhập dòng muốn thêm dữ liệu vào
+            row_index=int(input("Nhập số thứ tự dòng muốn thêm dữ liệu vào:"))-1
+        for column in data.columns:
+            new_data[column] = input(f"Nhập dữ liệu cho cột '{column}': ")
+        # Chuyển đổi dữ liệu mới thành DataFrame
+        new_data_df = pd.DataFrame([new_data])
+        # Thêm dữ liệu mới vào DataFrame ban đầu
+        if row_index == -1:
+            data = pd.concat([data, new_data_df], ignore_index=True)
+        else:
+            data = pd.concat([data.iloc[:row_index], new_data_df, data.iloc[row_index:]], ignore_index=True)
+    print("Số dòng của tệp sau khi thêm:",data) # In số lượng dòng sau khi thêm
+    print("Dữ liệu sau khi thêm mới:\n", data)
+    # Lưu DataFrame đã chỉnh sửa vào tệp Excel
+    data.to_excel(file, index=False)
+    print(f"Dữ liệu đã được lưu vào file: {file}")
+
+
+def Read():
+    """Đọc dữ liệu theo yêu cầu người dùng"""
+    file="Drug_1.xlsx"
+    data=pd.read_excel(file)
+    soluong_cot=len(data.columns) # Lưu số lượng cột vào biến 
+    print("Số lượng cột có trong tệp:",soluong_cot)
+    soluong_dong=len(data) # Lưu số lượng dòng vào biến
+    print("Số lượng dòng có trong tệp:",soluong_dong)
+    cot_bat_dau=-soluong_cot
+    while cot_bat_dau<0 or cot_bat_dau>soluong_cot: # Kiểm tra số lượng cột bắt đầu
+        cot_bat_dau=int(input("Nhập số thứ tự cột bắt đầu đọc:"))-1
+    cot_ket_thuc=soluong_cot+1
+    while (cot_ket_thuc<0 or cot_ket_thuc>soluong_cot) and cot_ket_thuc>=cot_bat_dau: # Kiểm tra số lượng cột kết thúc
+        cot_ket_thuc=int(input("Nhập số thứ tự cột kết thúc đọc:"))
+    dong_bat_dau=-soluong_dong
+    while dong_bat_dau<0 or dong_bat_dau>soluong_dong: # Kiểm tra số lượng dòng bắt đầu
+        dong_bat_dau=int(input("Nhập số thứ tự dòng bắt đầu đọc:"))-1
+    dong_ket_thuc=soluong_dong+1
+    while (dong_ket_thuc<0 or dong_ket_thuc>soluong_dong) and dong_ket_thuc>=dong_bat_dau: # Kiểm tra số lượng dòng kết thúc
+        dong_ket_thuc=int(input("Nhập số thứ tự dòng kết thúc đọc:"))
+    df=data.iloc[dong_bat_dau:dong_ket_thuc,cot_bat_dau:cot_ket_thuc] # Truy cập vào dữ liệu theo cột và dòng được chỉ định
+    print(df.to_string(index=False)) # In kết quả
+
+
+def Update():
+    """Cập nhật dữ liệu theo yêu cầu  người dùng"""
+    # Đọc dữ liệu từ trong file excel
+    file="Drug_1.xlsx"
+    df = pd.read_excel(file)
+    so_dong=len(df)
+    print("Số dòng có trong data",so_dong)
+    so_luong=-so_dong
+    while so_luong<0 or so_luong>so_dong:
+        so_luong=int(input("Nhập số lượng ô dữ liệu muốn cập nhật:")) # Yêu cầu người dùng nhập số lượng ô dữ liệu muốn cập nhật
+    tên_cột=df.columns.to_list()
+    print("Các cột có trong data:",tên_cột)
+    # Yêu cầu người dùng nhập thông tin cập nhật
+    for i in range(so_luong):
+        dữ_liệu_cột="l"
+        while dữ_liệu_cột not in tên_cột:
+            dữ_liệu_cột = input(f"Nhập tên cột thứ {i+1} cần cập nhật:")
+        dữ_liệu_dòng=-so_dong
+        while dữ_liệu_dòng<0 or dữ_liệu_dòng>so_dong: # Kiểm tra số dòng hợp lệ
+            dữ_liệu_dòng = int(input(f"Nhập số dòng thứ {i+1} cần cập nhật:")) - 1
+        Update_Value = input("Nhập dữ liệu mới:")
+        df.at[dữ_liệu_dòng,dữ_liệu_cột]=Update_Value
+        print(f"Dữ liệu tại cột {dữ_liệu_cột} dòng {dữ_liệu_dòng + 1 } đã được cập nhật thành {Update_Value} ")
+        print("Dữ liệu sau khi cập nhật là:",df.iloc[:dữ_liệu_dòng+1])
+    df.to_excel(file, index=False) #Lưu lại dữ liệu vào tệp excel
+    print(f"Đã hoàn thành việc xử lý dữ liệu và lưu tại {file}")
+
+
+def Delete():
+    """Xóa dữ liệu theo yêu cầu người dùng"""
+    file="Drug_1.xlsx"
+    data=pd.read_excel(file)
+    print("Tệp dữ liệu trước khi xóa",data)
+    so_luong=len(data) # Lưu số lượng dòng của tệp vào biến
+    print("Số lượng dòng của tệp dữ liệu là:",so_luong) # In số lượng dòng trước khi xóa
+    so_dong=-so_luong
+    while so_dong<0 or so_dong>so_luong: # Vòng lặp kiểm tra số lượng dòng xóa dữ liệu không là số âm và không lớn hơn số dòng ban đầu
+        so_dong=int(input("Nhập số lượng dòng muốn xóa:"))
+    for i in range(so_dong):
+        stt_dong=-so_luong
+        while stt_dong<0 or stt_dong>so_luong: # Vòng lặp kiểm tra số thứ tự dòng xóa dữ liệu không là số âm và không lớn hơn số dòng ban đầu
+            stt_dong=int(input("Nhập số thứ tự dòng muốn xóa là:"))-1 # Nhập số thứ tự dòng muốn xóa
+        data=data.drop(index=[stt_dong]) # Xóa dòng vừa nhập ở trên
+        print(f"Đã xóa dòng {stt_dong+1}")
+    print("Số lượng dòng của tệp dữ liệu sau khi xóa",len(data)) # In số lượng dòng sau khi xóa
+    print("Tệp dữ liệu sau khi xóa",data)
+    data.to_excel(file,index=False) # Lưu data vừa xử lý vào tệp 
+    print(f"Dữ liệu đã được lưu vào tệp {file}")
+
+
+def Bieu_do_tron() :
+    """Vẽ biểu đồ tròn thể hiện mức độ đánh giá của từng loại thuốc"""
+    path=input("Nhập tên thuốc muốn vẽ biểu đồ:")
+    path_data=f"{path}.xlsx"
+    try:
+        data= pd.read_excel(path_data) #Thử đọc file excel
         a = data['Reviews'].tolist() # a là danh sách giá trị từ cột reviews
         b = data['Effective'].tolist() # b là danh sách giá trị từ cột effective 
         fig = plt.figure() # tạo không gian biểu đồ để thêm các trục 
         # thêm khung biểu đồ vào figure với vị trí ở ngay mép trái 5% khung ở bên dưới sẽ nằm ngoài figure và khung sẽ chiếm toàn bộ figure
         ax = fig.add_axes([0,-0.05,1,1]) 
         ax.axis('equal') # đảm bảo tỉ lệ 2 trục bằng nhau 
-        explode = (0,0.2,0.4,0.6,0.8,1) # tưng pie được văng ra tính từ gốc trung tâm 
         # a:giá trị của từng pie , explode: chỉ ra khoảng cách của từng slice , gán nhãn từ cột effective cho mỗi pie , 
         # autopct : hiển thị phần trăm trong tuừng pie với 2 chữ số thập phân 
-        ax.pie(a,explode=explode,labels=b,autopct='%1.2f%%')
-        ax.set_title('Biểu đồ thể hiện mức độ đánh giá sự hiệu quả của Amoxicillin',fontsize=14) 
+        ax.pie(a,labels=b,autopct='%1.2f%%')
+        ax.set_title(f'Biểu đồ thể hiện mức độ đánh giá sự hiệu quả của{path}',fontsize=14) 
         # Hiển thị biểu đồ
         plt.show()
     except FileNotFoundError:
         # Nếu file trên không tồn tại sẽ tiếp tục câu lệnh bên dưới
-        print("Không thể vẽ biểu đồ vì vẫn chưa tồn tại file Acute_Bacterial_Sinusitis.xlsx.")
-        print("Vui lòng thực hiện đầy đủ các bước xử lý file bên trên (3,5,6) để vẽ biểu đồ được chính xác nhất.")
+        print(f"Không thể vẽ biểu đồ vì vẫn chưa tồn tại file {path_data}")
+        print("Vui lòng thực hiện đầy đủ các bước xử lý file bên trên")
 
 
-def Bieu_do_cot() :
+def Bieu_do_cot_doc() :
+    """Vẽ biểu đồ cột dọc thể hiện số lượng thuốc điều trị của mỗi bệnh"""
     # Đọc file Excel
-    data=pd.read_excel("Drug_1.xlsx")
+    data=pd.read_excel("Drug.xlsx")
     # Lấy cột dữ liệu Condition và chuyển thành kiểu danh sách với điều kiện chỉ lấy 1 dữ liệu duy nhất nếu bị trùng 
     conditions=data['Condition'].unique().tolist()
     # Tạo danh sách dùng để chứa số lượng thuốc của mỗi loại bệnh
@@ -135,9 +272,6 @@ def Bieu_do_cot() :
         count_drug=len(drugs) 
         # Thêm tổng số thuốc dùng để chữa trị bệnh vào danh sách
         lst_drug.append(count_drug)
-    # In ra danh sách cột Conditions và danh sách số lượng thuốc
-    print(conditions)
-    print(lst_drug)
     # Vẽ biểu đồ cột với trục ngang là tên các bệnh và trục dọc là số lượng thuốc điều trị bệnh đó
     plt.bar(conditions,lst_drug,color='green') 
     plt.xticks(rotation=30,ha="right") # Xoay tên của các cột 45 độ theo chiều kim đồng hồ và căn chỉnh các nhãn về phía bên phải 
@@ -149,40 +283,148 @@ def Bieu_do_cot() :
     plt.show() # Hiển thị biểu đồ
 
 
+def Bieu_do_cot_ngang():
+    """Vẽ biểu đồ cột ngang thể hiện giá bán của từng loại thuốc trong một bệnh"""
+    path=input("Nhập tên thuốc muốn vẽ biểu đồ:")
+    path_data=f"{path}.xlsx"
+    try:
+        cond=pd.read_excel(path_data) # Thử đọc tệp excel tên bệnh vừa tạo ở trên
+        drug=cond["Drug"].unique().tolist() # tạo một danh sách tên các thuốc trong đó
+        lst_price=[] # Tạo một dánh sách mới để chứa giá bán của thuốc
+        # Duyệt qua từng dữ liệu của danh sách drug ( Đi qua từng loại thuốc trong danh sách)
+        for i in drug:
+            price=cond.loc[cond["Drug"]==i]# Tạo data khác với điều kiện giống nhau tên thuốc
+            price_1=price["Price"].unique().tolist() # Tạo một danh sách chứa giá trị duy nhất là giá bán của data thuốc trên
+            price_2=price_1[0].replace("$","0") # Truy xuất giá trị đầu tiên trong danh sách rồi thay thế chuỗi $ thành Chuỗi 0
+            price_3=float(price_2) # Chuyển chuỗi trên thành kiểu số thực
+            lst_price.append(price_3) # Thêm biến vừa chuyển đổi trên vào danh sách 
+        plt.barh(drug,lst_price) # Vẽ biểu đồ cột ngang
+        plt.subplots_adjust(left=0.27)
+        plt.xlabel("Giá bán")
+        plt.ylabel("Tên thuốc")
+        plt.title(f"Biểu đồ thể hiện giá bán từng loại thuốc của bệnh {path}")
+        plt.xticks(lst_price,rotation=90)
+        plt.show()
+    except FileNotFoundError:
+        # Nếu file trên không tồn tại sẽ tiếp tục câu lệnh bên dưới
+        print(f"Không thể vẽ biểu đồ vì vẫn chưa tồn tại file {path_data}")
+        print("Vui lòng thực hiện đầy đủ các bước xử lý file bên trên")
+
+
 def Thoat_chuong_trinh():
+    """Thoát chương trình khi muốn"""
     print("Kết thúc chương trình")
     exit() # Thoát khỏi chương trình
 
 
 def Khong_hop_le() :
+    """Hiển thị khi người dùng nhập sai yêu cầu"""
     print("Lựa chọn không hợp lệ!")
 
 
-luachon_dict = { 
-    1: Doc_du_lieu ,
-    2: Sap_xep_du_lieu,
-    3: Cap_nhat_du_lieu ,
-    4: Tao_du_lieu_moi ,
-    5: Tao_data ,
-    6: Xoa_du_lieu ,
-    7: Bieu_do_tron ,
-    8: Bieu_do_cot ,
-    9: Thoat_chuong_trinh}
+def Quay_lai():
+    """Quay lại menu chính"""
+    menu()
+
+
+xuly_dict = { 1: Thong_tin,
+             2: Doc_du_lieu ,
+             3: Sap_xep_du_lieu,
+             4: Cap_nhat_du_lieu ,
+             5: Tao_du_lieu_moi ,
+             6: Xoa_du_lieu ,
+             7: Tao_data ,
+             8: Quay_lai}
+
+
+def Xu_ly_du_lieu():
+    """Hiển thị menu về xử lý dữ liệu để người dùng chọn"""
+    while True:
+        # In ra menu
+        print("Menu 1")
+        print("1.Hiển thị thông tin dữ liệu")
+        print("2.Đọc dữ liệu")
+        print("3.Sắp xếp dữ liệu")
+        print("4.Cập nhật dữ liệu")
+        print("5.Tạo cột dữ liệu mới ")
+        print("6.Xóa dữ liệu trùng")
+        print("7.Tạo tệp dữ liệu mới")
+        print("8.Quay lại menu chính")
+        chon = input("Mời chọn tính năng:")
+        if chon.isdigit() :
+            chon = int(chon)
+            xuly_dict.get(chon, Khong_hop_le)()
+        else :
+            print("Hãy nhập lại,dữ liệu là Số nhé !")
+
+
+crud_dict={1: Create,
+           2: Read,
+           3: Update,
+           4: Delete,
+           5: Quay_lai }
+
+
+def Co_che_CRUD():
+    """Hiển thị menu về cơ chế Crud để người dùng chọn và xử lý lựa chọn đó"""
+    try:
+        path=pd.read_excel("Drug_1.xlsx")
+        while True:
+        # In ra menu
+            print("Menu 2")
+            print("1.Tạo dữ liệu theo yêu cầu người dùng")
+            print("2.Đọc dữ liệu theo yêu cầu người dùng")
+            print("3.Cập nhật dữ liệu theo yêu cầu người dùng")
+            print("4.Xóa dữ liệu theo yêu cầu người dùng")
+            print("5.Quay lại menu chính")
+            chon = input("Mời chọn tính năng:")
+            if chon.isdigit() :
+                chon = int(chon)
+                crud_dict.get(chon, Khong_hop_le)()
+            else :
+                print("Hãy nhập lại,dữ liệu là Số nhé !")
+    except FileNotFoundError:
+        print(f"Vẫn chưa tồn tại tệp {path}. Vui lòng quay lại bước xử lý dữ liệu")
+
+
+bieudo_dict={1: Bieu_do_cot_doc,
+             2: Bieu_do_tron,
+             3: Bieu_do_cot_ngang,
+             4: Quay_lai}
+
+
+def Bieu_do():
+    """Hiển thị menu về vẽ biểu đồ để người dùng chọn và xử lý lựa chọn đó"""
+    while True:
+        # In ra menu
+        print("Menu 3")
+        print("1.Vẽ biểu đồ cột thể hiện số lượng thuốc của từng loại bệnh")
+        print("2.Vẽ biểu đồ tròn thể hiện mức độ đánh giá sự hiệu quả của thuốc")
+        print("3.Vẽ biểu đồ cột thể hiện giá bán của từng loại thuốc")
+        print("4.Quay lại menu chính")
+        chon = input("Mời chọn tính năng:")
+        if chon.isdigit() :
+            chon = int(chon)
+            bieudo_dict.get(chon, Khong_hop_le)()
+        else :
+            print("Hãy nhập lại,dữ liệu là Số nhé !")
+
+
+luachon_dict={1: Xu_ly_du_lieu,
+              2: Co_che_CRUD,
+              3: Bieu_do,
+              4: Thoat_chuong_trinh}
 
 
 def menu() :
+    """Hiển thị menu chính về các chức năng có thể thực hiện trong chương trình để người dùng chọn và xử lý lựa chọn đó"""
     while True:
         # In ra menu
-        print("menu")
-        print("1.Đọc dữ liệu")
-        print("2.Sắp xếp dữ liệu")
-        print("3.Cập nhật dữ liệu")
-        print("4.Tạo cột dữ liệu mới ")
-        print("5.Tạo tệp dữ liệu mới")
-        print("6.Xóa dữ liệu trùng")
-        print("7.Vẽ biểu đồ tròn")
-        print("8.Vẽ biểu đồ cột")
-        print("9.Thoát chương trình")
+        print("Menu chính")
+        print("1.Xử lý dữ liệu")
+        print("2.Thực hiện cơ chế Crud")
+        print("3.Vẽ biểu đồ")
+        print("4.Thoát chương trình")
         chon = input("Mời chọn tính năng:")
         if chon.isdigit() :
             chon = int(chon)
