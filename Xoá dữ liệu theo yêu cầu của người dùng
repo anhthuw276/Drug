@@ -1,0 +1,20 @@
+def Delete():
+    """Xóa dữ liệu theo yêu cầu người dùng"""
+    file="Drug_1.xlsx"
+    data=pd.read_excel(file)
+    print("Tệp dữ liệu trước khi xóa",data)
+    so_luong=len(data) # Lưu số lượng dòng của tệp vào biến
+    print("Số lượng dòng của tệp dữ liệu là:",so_luong) # In số lượng dòng trước khi xóa
+    so_dong=-so_luong
+    while so_dong<0 or so_dong>so_luong: # Vòng lặp kiểm tra số lượng dòng xóa dữ liệu không là số âm và không lớn hơn số dòng ban đầu
+        so_dong=int(input("Nhập số lượng dòng muốn xóa:"))
+    for i in range(so_dong):
+        stt_dong=-so_luong
+        while stt_dong<0 or stt_dong>so_luong: # Vòng lặp kiểm tra số thứ tự dòng xóa dữ liệu không là số âm và không lớn hơn số dòng ban đầu
+            stt_dong=int(input("Nhập số thứ tự dòng muốn xóa là:"))-1 # Nhập số thứ tự dòng muốn xóa
+        data=data.drop(index=[stt_dong]) # Xóa dòng vừa nhập ở trên
+        print(f"Đã xóa dòng {stt_dong+1}")
+    print("Số lượng dòng của tệp dữ liệu sau khi xóa",len(data)) # In số lượng dòng sau khi xóa
+    print("Tệp dữ liệu sau khi xóa",data)
+    data.to_excel(file,index=False) # Lưu data vừa xử lý vào tệp 
+    print(f"Dữ liệu đã được lưu vào tệp {file}")
