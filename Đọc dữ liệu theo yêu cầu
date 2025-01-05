@@ -1,0 +1,21 @@
+    """Đọc dữ liệu theo yêu cầu người dùng"""
+    file="Drug_1.xlsx"
+    data=pd.read_excel(file)
+    soluong_cot=len(data.columns) # Lưu số lượng cột vào biến 
+    print("Số lượng cột có trong tệp:",soluong_cot)
+    soluong_dong=len(data) # Lưu số lượng dòng vào biến
+    print("Số lượng dòng có trong tệp:",soluong_dong)
+    cot_bat_dau=-soluong_cot
+    while cot_bat_dau<0 or cot_bat_dau>soluong_cot: # Kiểm tra số lượng cột bắt đầu
+        cot_bat_dau=int(input("Nhập số thứ tự cột bắt đầu đọc:"))-1
+    cot_ket_thuc=soluong_cot+1
+    while (cot_ket_thuc<0 or cot_ket_thuc>soluong_cot) and cot_ket_thuc>=cot_bat_dau: # Kiểm tra số lượng cột kết thúc
+        cot_ket_thuc=int(input("Nhập số thứ tự cột kết thúc đọc:"))
+    dong_bat_dau=-soluong_dong
+    while dong_bat_dau<0 or dong_bat_dau>soluong_dong: # Kiểm tra số lượng dòng bắt đầu
+        dong_bat_dau=int(input("Nhập số thứ tự dòng bắt đầu đọc:"))-1
+    dong_ket_thuc=soluong_dong+1
+    while (dong_ket_thuc<0 or dong_ket_thuc>soluong_dong) and dong_ket_thuc>=dong_bat_dau: # Kiểm tra số lượng dòng kết thúc
+        dong_ket_thuc=int(input("Nhập số thứ tự dòng kết thúc đọc:"))
+    df=data.iloc[dong_bat_dau:dong_ket_thuc,cot_bat_dau:cot_ket_thuc] # Truy cập vào dữ liệu theo cột và dòng được chỉ định
+    print(df.to_string(index=False)) # In kết quả
