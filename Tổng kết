@@ -149,8 +149,8 @@ def Create():
             data = pd.concat([data, new_data_df], ignore_index=True)
         else:
             data = pd.concat([data.iloc[:row_index], new_data_df, data.iloc[row_index:]], ignore_index=True)
-    print("Số dòng của tệp sau khi thêm:",data) # In số lượng dòng sau khi thêm
-    print("Dữ liệu sau khi thêm mới:\n", data)
+        print("Dữ liệu sau khi tạo thêm:",data.iloc[:row_index+2])
+    print("Số dòng của tệp sau khi thêm:",len(data)) # In số lượng dòng sau khi thêm
     # Lưu DataFrame đã chỉnh sửa vào tệp Excel
     data.to_excel(file, index=False)
     print(f"Dữ liệu đã được lưu vào file: {file}")
